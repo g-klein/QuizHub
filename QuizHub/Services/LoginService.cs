@@ -21,9 +21,9 @@ namespace QuizHub.Services
             _generateJwts = generateJwts;
         }
 
-        public string Login(string Email, string Password)
+        public async Task<string> Login(string Email, string Password)
         {
-            var user = _usersRepository.GetUser(Email);
+            var user = await _usersRepository.GetUser(Email);
             if (user != null)
             {
                 var isValid = _verifyPasswords.IsPasswordValid(Password, user.Salt, user.Password);

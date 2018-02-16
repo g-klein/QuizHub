@@ -1,5 +1,5 @@
 ﻿using MongoDB.Bson;
-using QuizHub.Models;
+using QuizHub.Models.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace QuizHub.Database
 {
     public interface IUsersRepository
     {
-        bool UserExists(string Email);
-        ObjectId RegisterUser(string Email, string HashedPassword, string Salt);
-        User GetUser(string Email);
+        Task<bool> UserExists(string Email);
+        Task<ObjectId> RegisterUser(string Email, string HashedPassword, string Salt);
+        Task<User> GetUser(string Email);
     }
 }

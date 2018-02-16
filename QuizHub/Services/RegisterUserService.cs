@@ -21,15 +21,15 @@ namespace QuizHub.Services
             _hashPasswords = hashPasswords;
         }
 
-        public ObjectId RegisterUser(string Email, string Password)
+        public async Task<ObjectId> RegisterUser(string Email, string Password)
         {
-            if (_usersRepository.UserExists(Email))
+            if (await _usersRepository.UserExists(Email))
             {
                 throw new DuplicateUserException();
             } else
             {
                 var encryptionResult = _hashPasswords.HashPassword(Password);
-                return _usersRepository.RegisterUser(Email, encryptionResult.HashedPassword, encryptionResult.Salt);
+                return await _usersRepository.RegisterUser(Email, encryptionResult.HashedPassword, encryptionResult.Salt);
             }
         }
     }

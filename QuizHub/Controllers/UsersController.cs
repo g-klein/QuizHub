@@ -34,14 +34,14 @@ namespace MyCodeCamp.Controllers
 
         [HttpPost("Login")]
         [EnableCors("TestPolicy")]
-        public IActionResult Login([FromBody] UserLoginRequest user)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
         {
             if (!ModelState.IsValid)
                 return new BadRequestResult();
 
             try
             {
-                var jwt = _loginService.Login(user.Email, user.Password);
+                var jwt = await _loginService.Login(user.Email, user.Password);
                 return Ok(new { authToken = jwt });
             }
             //TODO: catch unauthorized exception
@@ -58,14 +58,14 @@ namespace MyCodeCamp.Controllers
 
         [HttpPost("Register")]
         [EnableCors("TestPolicy")]
-        public IActionResult Register([FromBody] UserRegistrationRequest user)
+        public async Task<IActionResult> Register([FromBody] UserRegistrationRequest user)
         {
             if (!ModelState.IsValid)
                 return new BadRequestResult();
 
             try
             {
-                var userId = _registerUserService.RegisterUser(user.Email, user.Password);
+                var userId = await _registerUserService.RegisterUser(user.Email, user.Password);
                 var jwt = _jwtGenerator.GetJwtString(userId.ToString(), user.Email);
                 return Ok(new { authToken = jwt });
             }

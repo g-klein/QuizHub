@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace QuizHub.Database.Interfaces
 {
-    interface IQuizRepository
+    public interface IQuizRepository
     {
-        List<Quiz> GetQuizes(ObjectId customerId);
-        void RenameQuiz(ObjectId QuizId, string QuizName);
-        //TODO: finish doing this
+        Task<Quiz> CreateQuiz(string QuizName, ObjectId UserId);
+        Task DeleteQuiz(ObjectId quizId);
+        Task<Quiz> GetQuiz(ObjectId id);
+        Task<Quiz> AddQuestion(ObjectId QuizId, string Question, string Answer);
     }
 }

@@ -10,6 +10,6 @@ namespace QuizHub.Services
         /// <summary>
         /// Verifies a user's credentials and returns a JWT token for the user
         /// </summary>
-        string Login(string Email, string Password);
+        Task<string> Login(string Email, string Password);
     }
 }

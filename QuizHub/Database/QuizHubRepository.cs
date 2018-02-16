@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using QuizHub.Models;
 using QuizHub.Models.ConfigurationModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using QuizHub.Models.Database;
 
 namespace QuizHub.Database
 {
@@ -19,6 +15,11 @@ namespace QuizHub.Database
             _mongoDbSettings = mongoDbOptions.Value;
             var client = new MongoClient(_mongoDbSettings.ConnectionString);
             _database = client.GetDatabase("QuizHub");
+        }
+
+        public IMongoCollection<Quiz> GetQuizCollection()
+        {
+            return _database.GetCollection<Quiz>("Quizzes");
         }
 
         IMongoCollection<User> IGetMongoCollections.GetUsersCollection()

@@ -9,6 +9,6 @@ namespace QuizHub.Services
 {
     public interface IRegisterUserService
     {
-        ObjectId RegisterUser(string Email, string Password);
+        Task<ObjectId> RegisterUser(string Email, string Password);
     }
 }

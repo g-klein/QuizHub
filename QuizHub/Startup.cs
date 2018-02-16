@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using QuizHub.Auth;
 using QuizHub.Database;
+using QuizHub.Database.Interfaces;
 using QuizHub.Models.ConfigurationModels;
 using QuizHub.Services;
 using Swashbuckle.AspNetCore.Swagger;
@@ -51,6 +52,8 @@ namespace MyCodeCamp
             services.AddSingleton<IHashPasswords, QuizPasswordHash>();
             services.AddSingleton<IVerifyPasswords, QuizPasswordHash>();
             services.AddSingleton<ILoginService, LoginService>();
+            services.AddSingleton<IQuizRepository, QuizRepository>();
+            services.AddSingleton<IQuizService, QuizService>();
             
             services.AddCors(config =>
             {

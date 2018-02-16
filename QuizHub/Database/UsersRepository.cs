@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using QuizHub.Models;
+using QuizHub.Models.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace QuizHub.Database
             _userCollection = getMongoCollections.GetUsersCollection();
         }
 
-        public ObjectId RegisterUser(string Email, string HashedPassword, string Salt)
+        public async Task<ObjectId> RegisterUser(string Email, string HashedPassword, string Salt)
         {
             var user = new User()
             {
@@ -26,25 +26,25 @@ namespace QuizHub.Database
                 Salt = Salt
             };
 
-            _userCollection.InsertOne(user);
+            await _userCollection.InsertOneAsync(user);
 
             return user._id;
         }
 
-        public bool UserExists(string Email)
+        public async Task<bool> UserExists(string Email)
         {
             var filter = Builders<User>.Filter.Eq("Email", Email);
-            var document = _userCollection.Find(filter).FirstOrDefault();
+            var document = await _userCollection.FindAsync(filter);
 
-            return document != null;
+            return document.FirstOrDefault() != null;
         }
 
-        public User GetUser(string Email)
+        public async Task<User> GetUser(string Email)
         {
             var filter = Builders<User>.Filter.Eq("Email", Email);
-            var user = _userCollection.Find(filter).FirstOrDefault();
+            var user = await _userCollection.FindAsync(filter);
 
-            return user;
+            return user.FirstOrDefault();
         }
     }
 }
