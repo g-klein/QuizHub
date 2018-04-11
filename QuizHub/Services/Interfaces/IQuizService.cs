@@ -14,5 +14,6 @@ namespace QuizHub.Services
         Task<Quiz> GetQuiz(ObjectId id);
         Task<bool> IsOwner(ObjectId UserId, ObjectId QuizId);
         Task<Quiz> AddQuestion(ObjectId quizId, string Question, string Answer);
+        Task<Quiz> DeleteQuizAsync(string quizId, string questionId);
     }
 }

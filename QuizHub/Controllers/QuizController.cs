@@ -23,7 +23,7 @@ namespace QuizHub.Controllers
             _quizService = quizService;
         }
 
-        [HttpPost("Create/{Name}")]
+        [HttpPost("{Name}")]
         [EnableCors("TestPolicy")]
         public async Task<IActionResult> CreateQuiz(string Name)
         {
@@ -32,7 +32,7 @@ namespace QuizHub.Controllers
             return Ok(new { quiz });
         }
 
-        [HttpPost("Delete/{Id}")]
+        [HttpDelete("{Id}")]
         [EnableCors("TestPolicy")]
         public async Task<IActionResult> DeleteQuiz(string Id)
         {
@@ -41,12 +41,12 @@ namespace QuizHub.Controllers
             {
                 var quizId = new ObjectId(Id);
                 var quiz = await _quizService.GetQuiz(quizId);
-                if(quiz == null)
+                if (quiz == null)
                 {
                     return StatusCode(StatusCodes.Status410Gone, new { message = "Error: quiz does not exist" });
                 }
 
-                if(quiz.OwnerId == userId)
+                if (quiz.OwnerId == userId)
                 {
                     _quizService.DeleteQuiz(quizId);
                     return Ok();
@@ -54,15 +54,16 @@ namespace QuizHub.Controllers
                 else
                 {
                     return Unauthorized();
-                }                
-            } catch
+                }
+            }
+            catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }            
+            }
         }
 
-        [HttpPost("AddQuestion")]
-        public async Task<IActionResult> AddQuestion([FromBody] AddQuestionRequest request)
+        [HttpPost("{QuizId}/Questions")]
+        public async Task<IActionResult> AddQuestion([FromBody] AddQuestionRequest request, string QuizId)
         {
             if (!ModelState.IsValid)
                 return new BadRequestResult();
@@ -70,7 +71,7 @@ namespace QuizHub.Controllers
             var userId = HttpContext.GetUserIdFromJwt();
             try
             {
-                var quizId = new ObjectId(request._id);
+                var quizId = new ObjectId(QuizId);
                 var quiz = await _quizService.GetQuiz(quizId);
                 if (quiz == null)
                 {
@@ -81,7 +82,40 @@ namespace QuizHub.Controllers
                 {
                     var result = await _quizService.AddQuestion(quizId, request.Question, request.Answer);
                     return Ok(new { quiz = result });
-                } else
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPatch("{QuizId}/Questions/{Id}")]
+        public async Task<IActionResult> DeleteQuestion(string QuizId, string Id)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+
+            var userId = HttpContext.GetUserIdFromJwt();
+            try
+            {
+                var quizId = new ObjectId(QuizId);
+                var quiz = await _quizService.GetQuiz(quizId);
+                if (quiz == null)
+                {
+                    return StatusCode(StatusCodes.Status410Gone, new { message = "Error: quiz does not exist" });
+                }
+
+                if (quiz.OwnerId == userId)
+                {
+                    quiz = await _quizService.DeleteQuizAsync(QuizId, Id);
+                    return Ok(quiz);
+                }
+                else
                 {
                     return Unauthorized();
                 }

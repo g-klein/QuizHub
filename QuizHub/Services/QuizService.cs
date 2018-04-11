@@ -43,5 +43,11 @@ namespace QuizHub.Services
             var quiz = await _quizRepository.AddQuestion(QuizId, Question, Answer);
             return quiz;
         }
+
+        public async Task<Quiz> DeleteQuizAsync(string quizId, string questionId)
+        {
+            var quiz = await _quizRepository.DeleteQuestion(quizId, questionId);
+            return quiz;
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace QuizHub.Database.Interfaces
         Task DeleteQuiz(ObjectId quizId);
         Task<Quiz> GetQuiz(ObjectId id);
         Task<Quiz> AddQuestion(ObjectId QuizId, string Question, string Answer);
+        Task<Quiz> DeleteQuestion(string quizId, string questionId);
     }
 }

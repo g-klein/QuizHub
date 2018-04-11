@@ -53,5 +53,19 @@ namespace QuizHub.Database
 
             return await _quizCollection.FindOneAndUpdateAsync(filter, update, options);
         }
+
+        public async Task<Quiz> DeleteQuestion(string quizId, string questionId)
+        {
+            var filter = Builders<Quiz>.Filter.Eq("_id", quizId);
+            var update = Builders<Quiz>.Update.PullFilter(q => q.Questions,
+                                                q => q._id == questionId);
+
+            var options = new FindOneAndUpdateOptions<Quiz>
+            {
+                ReturnDocument = ReturnDocument.After
+            };
+
+            return await _quizCollection.FindOneAndUpdateAsync(filter, update, options);
+        }
     }
 }

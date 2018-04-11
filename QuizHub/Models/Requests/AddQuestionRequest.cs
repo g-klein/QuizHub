@@ -10,8 +10,6 @@ namespace QuizHub.Models.Requests
     public class AddQuestionRequest
     {
         [Required]
-        public string _id { get; set; }
-        [Required]
         public string Question { get; set; }
         [Required]
         public string Answer { get; set; }

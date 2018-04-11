@@ -32,7 +32,7 @@ namespace MyCodeCamp.Controllers
             _loginService = loginService;
         }
 
-        [HttpPost("Login")]
+        [HttpGet("Login")]
         [EnableCors("TestPolicy")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
         {
